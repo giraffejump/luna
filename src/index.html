@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="0" http-equiv="Expires">
+  <meta content="no-cache" http-equiv="Pragma">
+  <meta content="no-cache" http-equiv="Cache-control">
+  <meta content="no-cache" http-equiv="Cache">
+  <title></title>
+  <base href="/luna">
+
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="favicon.ico" rel="icon" type="image/x-icon">
+  <style>
+    :root {
+      --primary-color: #1ab394
+    }
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      z-index: 9999;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: #3498db;
+      animation: spin 1s infinite linear;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+<app-root>
+  <div id="loading">
+    <div class="spinner"></div>
+  </div>
+</app-root>
+<span id="marker" style="display: none;font-size: 14px">marker</span>
+</body>
+<script>
+  if (navigator.keyboard && navigator.keyboard.lock) {
+    navigator.keyboard.lock(['Escape']);
+  } else {
+    console.log('浏览器不支持 ESC 长摁退出功能')
+  }
+  window.onload = async function (ev) {
+    let clipboardData = "";
+
+    if (!document.hasFocus()) return
+
+    try {
+      // 读取粘贴板内容
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        clipboardData = await navigator.clipboard.readText()
+      }
+
+      // 写会内容
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(clipboardData);
+      }
+    } catch (e) {
+      console.info(e)
+    }
+  }
+</script>
+</html>

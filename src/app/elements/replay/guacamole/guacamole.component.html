@@ -1,0 +1,64 @@
+<div class="player-container" id="player">
+  <div class="display">
+    <div class="seek-overlay" *ngIf="isSeeking">
+      <div class="seek-content">
+        <nz-spin nzSize="default"></nz-spin>
+        <p>正在跳转...</p>
+        <button class="cancel-btn" (click)="cancelSeek($event)">取消</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="commands" *ngIf="commands.length > 0">
+        <div class="commands-header">
+          <span>命令历史 ({{ commands.length }})</span>
+        </div>
+        <div class="commands-list"
+             infiniteScroll
+             [infiniteScrollDistance]="2"
+             [infiniteScrollThrottle]="50"
+             (scrolled)="onScroll()"
+             [scrollWindow]="false">
+          <div class="command-item"
+               *ngFor="let item of commands; trackBy: trackByCommand"
+               (click)="commandClick(item)"
+               [title]="item.input">
+            <div class="command-text">{{ item.input }}</div>
+            <div class="command-time">{{ item.atime }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 屏幕 -->
+      <div class="screen-wrapper" [class.full]="commands.length === 0">
+        <div id="screen" class="screen" (click)="toggle()"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="controls-left">
+      <button class="control-btn" (click)="toggle()">
+        <i nz-icon [nzType]="isPlaying ? 'pause-circle' : 'play-circle'" nzTheme="fill"></i>
+      </button>
+      <button class="control-btn" (click)="restart()">
+        <i nz-icon nzType="reload" nzTheme="outline"></i>
+      </button>
+    </div>
+
+    <div class="controls-center" [ngClass]="rangeHideClass">
+      <span class="time">{{ position }} / {{ duration }}</span>
+      <div class="progress">
+        <input type="range"
+               id="position-slider"
+               [(ngModel)]="percent"
+               [max]="max"
+               (mouseup)="runFrom()"
+               class="progress-slider">
+      </div>
+    </div>
+
+    <div class="controls-right">
+    </div>
+  </div>
+</div>

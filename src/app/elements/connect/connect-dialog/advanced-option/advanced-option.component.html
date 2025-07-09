@@ -1,0 +1,53 @@
+<div *ngIf='advancedOptions && advancedOptions.length' class="advanced-option">
+  <nz-collapse>
+    <nz-collapse-panel
+      *ngIf="isShowAdvancedOption"
+      [nzHeader]="'Advanced option' | translate"
+    >
+      <div class="options-container">
+        <nz-form-item *ngFor="let item of advancedOptions">
+          <nz-form-label nzNoColon>{{ item.label | translate }}</nz-form-label>
+          <span>
+            <ng-container *ngIf="item.type === 'checkbox'">
+              <label
+                (ngModelChange)="onChange()"
+                [(ngModel)]="connectOption[item.field]"
+                [name]="item.field"
+                nz-checkbox
+              >
+                {{ item.label | translate }}
+              </label>
+            </ng-container>
+            <ng-container *ngIf="item.type === 'select'">
+                <nz-select
+                  (ngModelChange)="onChange()"
+                  [(ngModel)]="connectOption[item.field]"
+                  [name]="item.field"
+                  style="width: 100%"
+                >
+                  <nz-option
+                    *ngFor="let option of item.options"
+                    [nzLabel]="option.label | translate"
+                    [nzValue]="option.value"
+                  ></nz-option>
+                </nz-select>
+            </ng-container>
+            <ng-container *ngIf="item.type === 'radio'">
+                <nz-radio-group
+                  (ngModelChange)="onChange()"
+                  [(ngModel)]="connectOption[item.field]"
+                  [name]="item.field"
+                >
+                  <label
+                    *ngFor="let option of item.options"
+                    [nzValue]="option.value"
+                    nz-radio
+                  >{{ option.label | translate }}</label>
+                </nz-radio-group>
+            </ng-container>
+          </span>
+        </nz-form-item>
+      </div>
+    </nz-collapse-panel>
+  </nz-collapse>
+</div>
